@@ -1,4 +1,3 @@
-
 % ===========================================================
 % Main loop:
 % 1. Repeat "input-response" cycle until input starts with "bye"
@@ -53,8 +52,24 @@ process([bye|_]):-
 % 3. Obtain FOL representation for input sentence
 % ===========================================================
 
-%parse(Input, SemanticRepresentation):-
-% ...
+parse(Input, SemanticRepresentation):-
+        srparse([],Input, SemanticRepresentation).
+ 
+srparse([X],[], X).
+srparse([X],[], X):-
+	numbervars(X,0,_).
+
+srparse([Y,X|MoreStack],Words,SemanticRepresentation):-
+       rule(LHS,[X,Y]),
+       srparse([LHS|MoreStack],Words,SemanticRepresentation).
+
+srparse([X|MoreStack],Words,SemanticRepresentation):-
+       rule(LHS,[X]),
+       srparse([LHS|MoreStack],Words,SemanticRepresentation).
+
+srparse(Stack,[Word|Words],SemanticRepresentation):-
+        lex(X,Word),
+        srparse([X|Stack],Words,SemanticRepresentation).
 
 
 % ===========================================================
@@ -109,25 +124,25 @@ lemma(ten,num).
 
 
 % Questions
-% lemma(will,aux).
-% lemma(did,aux).
+lemma(will,aux).
+lemma(did,aux).
 
-% lemma(is,be).
-% lemma(was,be).
-% lemma(are,be).
+lemma(is,be).
+lemma(was,be).
+lemma(are,be).
 
 % ToDo: one is person one is thing so need to differ
-% lemma(who,whpr).
-% lemma(what,whpr).
+lemma(who,whpr).
+lemma(what,whpr).
 
-% lemma(and,coord).
-% lemma(but,coord).
-% lemma(or,coord).
+lemma(and,coord).
+lemma(but,coord).
+lemma(or,coord).
 
-% lemma(that,rel).
-% lemma(what,rel).
-% lemma(who,rel).
-% lemma(which,rel).
+lemma(that,rel).
+lemma(what,rel).
+lemma(who,rel).
+lemma(which,rel).
 
  
 % --------------------------------------------------------------------
@@ -180,20 +195,20 @@ rule(np(X),[n(X)]).
 % ToDo: Add rule for ditransistive
 
 % Question rules: sym sem3
-% rule(vp(X^K,[]),[tv(X^Y,[]),np(Y^K)])
-% rule(vp(X,WH),[iv(X,WH)])
-% rule(s(Y,WH),[np(X^Y),vp(X,WH)])
+rule(vp(X^K,[]),[tv(X^Y,[]),np(Y^K)])
+rule(vp(X,WH),[iv(X,WH)])
+rule(s(Y,WH),[np(X^Y),vp(X,WH)])
 
-% rule(vp(K,[WH]),[tv(Y,[WH]),np(Y^K)])
-% rule(s(X,[WH]),[vp(X,[WH])])
+rule(vp(K,[WH]),[tv(Y,[WH]),np(Y^K)])
+rule(s(X,[WH]),[vp(X,[WH])])
 
-% rule(Y,[whpr(X^Y),vp(X,[])])
-% rule(ynq(Y),[aux, np(X^Y),vp(X,[])])
-% rule(Z,[whpr((X^Y)^Z), inv_s(Y,[X])])
-% rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])])
+rule(Y,[whpr(X^Y),vp(X,[])])
+rule(ynq(Y),[aux, np(X^Y),vp(X,[])])
+rule(Z,[whpr((X^Y)^Z), inv_s(Y,[X])])
+rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])])
 
-% rule(n(X^and(Y,Z)),[n(X^Y),rc(X^Z,[])])
-% rule(n(X^and(Y,Z)),[n(X^Y),rc(Z,[X])])
+rule(n(X^and(Y,Z)),[n(X^Y),rc(X^Z,[])])
+rule(n(X^and(Y,Z)),[n(X^Y),rc(Z,[X])])
 % ...
 
 
