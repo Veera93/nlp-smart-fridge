@@ -94,15 +94,18 @@ lemma(every,dtforall).
 lemma(the,dtthe).
 
 lemma(box,n).
+lemma(ham,n).
+lemma(freezer,n).
+lemma(egg,n).
+lemma(bowl,n).
 
 lemma(tom,pn).
 lemma(mia,pn).
+lemma(sue,pn).
 
-lemma(red,adj).
-
-lemma(is,be).
-lemma(was,be).
 lemma(eat,tv).
+lemma(contain,tv).
+lemma(belong,tv).
 
 lemma(in,p).
 lemma(under,p).
@@ -122,6 +125,11 @@ lemma(nine,num).
 lemma(nine,num).
 lemma(ten,num).
 
+lemma(blue,adj).
+lemma(white,adj).
+lemma(yellow,adj).
+lemma(red,adj).
+lemma(green,adj).
 
 % Questions
 lemma(will,aux).
@@ -131,9 +139,8 @@ lemma(is,be).
 lemma(was,be).
 lemma(are,be).
 
-% ToDo: one is person one is thing so need to differ
-lemma(who,whpr).
-lemma(what,whpr).
+lemma(who,whpr1).
+lemma(what,whpr2).
 
 lemma(and,coord).
 lemma(but,coord).
@@ -143,6 +150,7 @@ lemma(that,rel).
 lemma(what,rel).
 lemma(who,rel).
 lemma(which,rel).
+lemma(to,rel).
 
  
 % --------------------------------------------------------------------
@@ -150,10 +158,25 @@ lemma(which,rel).
 % word = lemma + suffix (for "suffix" of size 0 or bigger)
 % --------------------------------------------------------------------
 
-
-lex(n(X^P),Lemma):-
-	lemma(Lemma,n),
+% lex(n(X^man(X)),man).
+lex(n(X^P),Word):-
+	member(Suffix,['',s,es]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,n),
 	P=.. [Lemma,X].
+
+lex(pn((Word^X)^X),Word):- lemma(Word,pn).
+% lex(iv(X^sneezed(X)),sneezed).
+
+lex(iv(X^P),Word):-
+	member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,iv),
+	P=..[Lemma,X,[]].
+
+%lex(tv(X^Y^saw(X,Y)),saw).
+lex(tv(X^Y^P),Word):-
+	member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,tv),
+	P=..[Lemma,X,Y,[]].
+
+%lex(adj((X^P)^X^and(P,old(X))),old).
+
 
 lex(dt((X^P)^(X^Q)^forall(X,imp(P,Q))),Word):-
 		lemma(Word,dtforall).
@@ -195,20 +218,20 @@ rule(np(X),[n(X)]).
 % ToDo: Add rule for ditransistive
 
 % Question rules: sym sem3
-rule(vp(X^K,[]),[tv(X^Y,[]),np(Y^K)])
-rule(vp(X,WH),[iv(X,WH)])
-rule(s(Y,WH),[np(X^Y),vp(X,WH)])
+rule(vp(X^K,[]),[tv(X^Y,[]),np(Y^K)]).
+rule(vp(X,WH),[iv(X,WH)]).
+rule(s(Y,WH),[np(X^Y),vp(X,WH)]).
 
-rule(vp(K,[WH]),[tv(Y,[WH]),np(Y^K)])
-rule(s(X,[WH]),[vp(X,[WH])])
+rule(vp(K,[WH]),[tv(Y,[WH]),np(Y^K)]).
+rule(s(X,[WH]),[vp(X,[WH])]).
 
-rule(Y,[whpr(X^Y),vp(X,[])])
-rule(ynq(Y),[aux, np(X^Y),vp(X,[])])
-rule(Z,[whpr((X^Y)^Z), inv_s(Y,[X])])
-rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])])
+rule(Y,[whpr(X^Y),vp(X,[])]).
+rule(ynq(Y),[aux, np(X^Y),vp(X,[])]).
+rule(Z,[whpr((X^Y)^Z), inv_s(Y,[X])]).
+rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])]).
 
-rule(n(X^and(Y,Z)),[n(X^Y),rc(X^Z,[])])
-rule(n(X^and(Y,Z)),[n(X^Y),rc(Z,[X])])
+rule(n(X^and(Y,Z)),[n(X^Y),rc(X^Z,[])]).
+rule(n(X^and(Y,Z)),[n(X^Y),rc(Z,[X])]).
 % ...
 
 
@@ -252,3 +275,8 @@ respond(Evaluation) :-
 % wh-interrogative false in the model
 % ...							
 
+
+% ===========================================================
+% Helper Functions
+% ===========================================================
+%check_tv(Word,Lemma):- member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,tv).
