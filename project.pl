@@ -103,6 +103,7 @@ lemma(bowl,n).
 lemma(house,n).
 lemma(meat,n).
 lemma(fruit,n).
+lemma(sandwich,n).
 
 lemma(tom,pn).
 lemma(mia,pn).
@@ -146,6 +147,7 @@ lemma(happy,adj).
 % Questions
 lemma(will,aux).
 lemma(did,aux).
+lemma(does,aux).
 
 lemma(is,be).
 lemma(was,be).
@@ -212,10 +214,10 @@ lex(dt((X^P)^(X^Q)^the(X,and(P,Q))),Word):-
 lex(dt((X^P)^(X^Q)^not(X,and(P,Q))),Word):-
 		lemma(Word,dtnot).
 
-lex(rel([]), Word):-
+lex(rel, Word):-
 		lemma(Word,rel).
 
-lex(aux([]), Word):-
+lex(aux, Word):-
 		lemma(Word,aux).
 
 % ...
@@ -231,7 +233,7 @@ lex(aux([]), Word):-
 % rule(+LHS,+ListOfRHS)
 % --------------------------------------------------------------------
 
-rule(s(Y),[np(X^Y),vp(X)]).
+rule(s(Y),[np(X^Y),vp(X,[])]).
 
 rule(vp(X^W),[tv(X^Y),np(Y^W)]).
 rule(vp(X),[iv(X)]).
@@ -258,6 +260,7 @@ rule(vp(K,[WH]),[tv(Y,[WH]),np(Y^K)]).
 rule(s(X,[WH]),[vp(X,[WH])]).
 
 rule(Y,[whpr(X^Y),vp(X,[])]).
+rule(ynq(Y),[aux, s(Y)]).
 rule(ynq(Y),[aux, np(X^Y),vp(X,[])]).
 rule(Z,[whpr((X^Y)^Z), inv_s(Y,[X])]).
 rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])]).
@@ -266,9 +269,10 @@ rule(n(X^and(Y,Z)),[n(X^Y),rc(X^Z,[])]).
 rule(n(X^and(Y,Z)),[n(X^Y),rc(Z,[X])]).
 
 %(RC; φ, []) -> REL (VP; φ, [])
-rule(rc(X,[]),[rel([]),vp(X,[])]).
+rule(rc(X,[]),[rel,vp(X,[])]).
 %(RC; φ, [x]) -> REL (S; φ, [x])
-rule(rc(X,[Z]),[rel([]),s(X,[Z])]).
+rule(rc(X,[Z]),[rel,s(X,[Z])]).
+%
 % ...
 
 
@@ -317,3 +321,6 @@ respond(Evaluation) :-
 % Helper Functions
 % ===========================================================
 %check_tv(Word,Lemma):- member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,tv).
+
+% parse([does,the,sandwich,contain,no,meat], X)
+% parse([does,the,sandwich,contains,no,meat], X)
