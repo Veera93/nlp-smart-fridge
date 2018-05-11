@@ -93,11 +93,15 @@ lemma(every,dtforall).
 
 lemma(the,dtthe).
 
+lemma(no,dtnot).
+
 lemma(box,n).
 lemma(ham,n).
 lemma(freezer,n).
 lemma(egg,n).
 lemma(bowl,n).
+lemma(house,n).
+lemma(meat,n).
 
 lemma(tom,pn).
 lemma(mia,pn).
@@ -106,9 +110,14 @@ lemma(sue,pn).
 lemma(eat,tv).
 lemma(contain,tv).
 lemma(belong,tv).
+lemma(like,tv).
+lemma(sneeze,tv).
 
 lemma(in,p).
 lemma(under,p).
+lemma(on,p).
+lemma(near,p).
+lemma(over,p).
 
 lemma(on,vacp).   
 lemma(to,vacp).
@@ -130,6 +139,8 @@ lemma(white,adj).
 lemma(yellow,adj).
 lemma(red,adj).
 lemma(green,adj).
+lemma(black,adj).
+lemma(happy,adj).
 
 % Questions
 lemma(will,aux).
@@ -194,7 +205,15 @@ lex(dt((X^P)^(X^Q)^exists(X,and(P,Q))),Word):-
 		lemma(Word,dtexists).
 
 lex(dt((X^P)^(X^Q)^the(X,and(P,Q))),Word):-
-		lemma(Word,dtthe).				
+		lemma(Word,dtthe).
+
+%No - determinant
+lex(dt((X^P)^(X^Q)^not(X,and(P,Q))),Word):-
+		lemma(Word,dtnot).
+
+
+
+
 % ...
 
 % --------------------------------------------------------------------
@@ -203,7 +222,7 @@ lex(dt((X^P)^(X^Q)^the(X,and(P,Q))),Word):-
 
 % ...
 
-% --------------------------------------------------------------------
+% --------------forall------------------------------------------------------
 % Phrasal rules
 % rule(+LHS,+ListOfRHS)
 % --------------------------------------------------------------------
