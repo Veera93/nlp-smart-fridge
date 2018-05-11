@@ -102,6 +102,7 @@ lemma(egg,n).
 lemma(bowl,n).
 lemma(house,n).
 lemma(meat,n).
+lemma(fruit,n).
 
 lemma(tom,pn).
 lemma(mia,pn).
@@ -211,8 +212,11 @@ lex(dt((X^P)^(X^Q)^the(X,and(P,Q))),Word):-
 lex(dt((X^P)^(X^Q)^not(X,and(P,Q))),Word):-
 		lemma(Word,dtnot).
 
+lex(rel([]), Word):-
+		lemma(Word,rel).
 
-
+lex(aux([]), Word):-
+		lemma(Word,aux).
 
 % ...
 
@@ -260,6 +264,11 @@ rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])]).
 
 rule(n(X^and(Y,Z)),[n(X^Y),rc(X^Z,[])]).
 rule(n(X^and(Y,Z)),[n(X^Y),rc(Z,[X])]).
+
+%(RC; φ, []) -> REL (VP; φ, [])
+rule(rc(X,[]),[rel([]),vp(X,[])]).
+%(RC; φ, [x]) -> REL (S; φ, [x])
+rule(rc(X,[Z]),[rel([]),s(X,[Z])]).
 % ...
 
 
