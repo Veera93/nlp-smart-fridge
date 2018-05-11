@@ -158,25 +158,34 @@ lemma(to,rel).
 % word = lemma + suffix (for "suffix" of size 0 or bigger)
 % --------------------------------------------------------------------
 
-% lex(n(X^man(X)),man).
+% Noun
+
 lex(n(X^P),Word):-
 	member(Suffix,['',s,es]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,n),
 	P=.. [Lemma,X].
 
 lex(pn((Word^X)^X),Word):- lemma(Word,pn).
-% lex(iv(X^sneezed(X)),sneezed).
 
-lex(iv(X^P),Word):-
+% IV With slots
+
+lex(iv(X^P,[]),Word):-
 	member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,iv),
-	P=..[Lemma,X,[]].
+	P=..[Lemma,X].
 
-%lex(tv(X^Y^saw(X,Y)),saw).
-lex(tv(X^Y^P),Word):-
+%TV with slots
+lex(tv(X^Y^P,[]),Word):-
 	member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,tv),
-	P=..[Lemma,X,Y,[]].
+	P=..[Lemma,X,Y].
 
-%lex(adj((X^P)^X^and(P,old(X))),old).
+%Adjective
+lex(adj((X^P)^X^and(P,Q)),Lemma):-
+	lemma(Lemma,adj),
+	Q=..[Lemma,X].
 
+%Preposition
+lex(p((Y^R)^Q^(X^P)^and(P,Q)),Lemma):-
+	lemma(Lemma,p),
+	R=..[Lemma,X,Y].
 
 lex(dt((X^P)^(X^Q)^forall(X,imp(P,Q))),Word):-
 		lemma(Word,dtforall).
