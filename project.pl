@@ -326,7 +326,7 @@ respond(Evaluation) :-
 % Helper Functions
 % ===========================================================
 %check_tv(Word,Lemma):- member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,tv).
-
+% parse([a,blue,box,contains,some,ham], X)
 % parse([does,the,sandwich,contain,no,meat], X)
 % parse([has,no,meat], X)
 % parse([every, white, container, on, the, bottom, shelf, contains, a, banana], X)
