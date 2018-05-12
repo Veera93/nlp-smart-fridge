@@ -170,6 +170,7 @@ lemma(are,be).
 
 lemma(who,whpr1).
 lemma(what,whpr2).
+lemma(which,whpr2).
 
 lemma(and,coord).
 lemma(but,coord).
@@ -178,6 +179,7 @@ lemma(or,coord).
 lemma(that,rel).
 lemma(which,rel).
 lemma(to,rel).
+lemma(who,rel).
 
  
 % --------------------------------------------------------------------
@@ -227,9 +229,6 @@ lex(dt((X^P)^(X^Q)^the(X,and(P,Q))),Word):-
 lex(dt((X^P)^(X^Q)^not(X,and(P,Q))),Word):-
 		lemma(Word,dtnot).
 
-lex(rel, Word):-
-		lemma(Word,rel).
-
 lex(aux, Word):-
 		lemma(Word,aux).
 % (WHPR; λP.?x(person(x), P(x))) -> who
@@ -238,6 +237,8 @@ lex(whpr((X^P)^exists(X^and(person(X)),P)), Word):-
 % (WHPR; λP.?x(thing(x), P(x))) -> what
 lex(whpr((X^P)^exists(X^and(thing(X)),P)), Word):-
     lemma(Word,whpr2).
+lex(rel, Word):-
+		lemma(Word,rel).
 % ...
 
 % --------------------------------------------------------------------
