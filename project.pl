@@ -113,12 +113,15 @@ lemma(shelf,n).
 lemma(banana,n).
 lemma(almond,n).
 lemma(milk,n).
+lemma(shelf,n).
+lemma(apple,n).
 
 lemma(tom,pn).
 lemma(mia,pn).
 lemma(sue,pn).
 
 lemma(eat,tv).
+lemma(ate,tv).
 lemma(contain,tv).
 lemma(like,tv).
 lemma(sneeze,tv).
@@ -159,6 +162,8 @@ lemma(black,adj).
 lemma(happy,adj).
 lemma(bottom,adj).
 lemma(almond,adj).
+lemma(top,adj).
+lemma(middle,adj).
 
 % Questions
 lemma(will,aux).
@@ -233,10 +238,10 @@ lex(dt((X^P)^(X^Q)^not(X,and(P,Q))),Word):-
 lex(aux, Word):-
 		lemma(Word,aux).
 % (WHPR; λP.?x(person(x), P(x))) -> who
-lex(whpr((X^P)^exists(X^and(person(X)),P)), Word):-
+lex(whpr((X^P)^exists(X,and(person(X)),P)), Word):-
     lemma(Word,whpr1).
 % (WHPR; λP.?x(thing(x), P(x))) -> what
-lex(whpr((X^P)^exists(X^and(thing(X)),P)), Word):-
+lex(whpr((X^P)^exists(X,and(thing(X)),P)), Word):-
     lemma(Word,whpr2).
 
 %Lex for PP complement
@@ -365,9 +370,23 @@ respond(Evaluation) :-
 % parse([every, white, container, on, the, bottom, shelf, contains, a, banana], X)
 % parse([the,white,box,in,the,freezer,contains,ham],X)
 % parse([who,drank,the,almond,milk], X)
-% parse([tom,punched], X).
-% parse([who,did,tom,punched], X).
-
+% parse([tom,ate,an,apple],X).
+% parse([what,did,tom,eat],X).
+% parse([what,does,the,green,box,contain],X).
+% parse([what, does, the, green, box, on, the, top, shelf, contain],X).
+% parse([every, blue, container, on, the, top, shelf, contains, a, sandwich, that, has, no, meat],X).
+% parse([what, does, the, yellow, bowl, on, the, middle, shelf, contain],X).
+% parse([who, drank, the, almond, milk],X).
+% 
 % parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
 % parse([is,there,a,sandwich,contain,no,meat], X)
+% Are there two watermelons in the fridge?
+% Is there milk?
 % parse([which,milk,did,sam,drink], X).
+% 
+% parse([is,there,an,egg,inside,the,blue,box], X)
+% Is there a sandwich that does not contain meat?
+% Is there an empty box of popsicles in the freezer?
+% parse([are,there,two,eggs,inside,the,blue,box],X).
+% parse([who,put,every,yellow,box,on,the,white,bowl],X).
+
