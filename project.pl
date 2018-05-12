@@ -238,6 +238,18 @@ lex(whpr((X^P)^exists(X^and(person(X)),P)), Word):-
 % (WHPR; λP.?x(thing(x), P(x))) -> what
 lex(whpr((X^P)^exists(X^and(thing(X)),P)), Word):-
     lemma(Word,whpr2).
+
+%Lex for PP complement
+%(PV; λx.λy.rely(x,y), []) -> rely
+lex(pv(X^Y^P,[]),Lemma) :- 
+    lemma(Lemma,pv),
+	P=..[Lemma,X,Y].
+%(P; λP.P, []) -> on | of | to | at | ...
+lex(p(X,[]), Word) :-
+    lemma(Word,vacp).
+%(PP; λP.P(X), [x]) -> on | of | to | at | ...
+lex(pp(X^_,[X]), Word) :-
+    lemma(Word,vacp).
 lex(rel, Word):-
 		lemma(Word,rel).
 % ...
@@ -297,6 +309,9 @@ rule(rc(X,[Z]),[rel,s(X,[Z])]).
 rule(iv(X^P,[Y]),[tv(X^Y^P,[])]).
 % (TV; λy.φ, [x]) -> (TV; λx.λy.φ, [ ])
 rule(tv(Y^P,[X]),[tv(X^Y^P,[])]).
+
+% (VP;X^Y) -> (PV;Y)(PP;X))
+rule(vp(X^Y,[WH]),[pv(X^Z,[]),pp(Z^Y,[WH])]).
 % ...
 
 
