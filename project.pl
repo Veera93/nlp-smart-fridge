@@ -63,6 +63,10 @@ srparse([Y,X|MoreStack],Words,SemanticRepresentation):-
        rule(LHS,[X,Y]),
        srparse([LHS|MoreStack],Words,SemanticRepresentation).
 
+srparse([Z,Y,X|MoreStack],Words,SemanticRepresentation):-
+       rule(LHS,[X,Y,Z]),
+       srparse([LHS|MoreStack],Words,SemanticRepresentation).
+
 srparse([X|MoreStack],Words,SemanticRepresentation):-
        rule(LHS,[X]),
        srparse([LHS|MoreStack],Words,SemanticRepresentation).
@@ -107,6 +111,8 @@ lemma(sandwich,n).
 lemma(container,n).
 lemma(shelf,n).
 lemma(banana,n).
+lemma(almond,n).
+lemma(milk,n).
 
 lemma(tom,pn).
 lemma(mia,pn).
@@ -114,10 +120,13 @@ lemma(sue,pn).
 
 lemma(eat,tv).
 lemma(contain,tv).
-lemma(belong,tv).
 lemma(like,tv).
 lemma(sneeze,tv).
 lemma(has,tv).
+lemma(drank,tv).
+
+lemma(belong,pv).
+lemma(rely,pv).
 
 lemma(in,p).
 lemma(under,p).
@@ -148,6 +157,7 @@ lemma(green,adj).
 lemma(black,adj).
 lemma(happy,adj).
 lemma(bottom,adj).
+lemma(almond,adj).
 
 % Questions
 lemma(will,aux).
@@ -166,8 +176,6 @@ lemma(but,coord).
 lemma(or,coord).
 
 lemma(that,rel).
-lemma(what,rel).
-lemma(who,rel).
 lemma(which,rel).
 lemma(to,rel).
 
@@ -224,7 +232,12 @@ lex(rel, Word):-
 
 lex(aux, Word):-
 		lemma(Word,aux).
-
+% (WHPR; λP.?x(person(x), P(x))) -> who
+lex(whpr((X^P)^exists(X^and(person(X)),P)), Word):-
+    lemma(Word,whpr1).
+% (WHPR; λP.?x(thing(x), P(x))) -> what
+lex(whpr((X^P)^exists(X^and(thing(X)),P)), Word):-
+    lemma(Word,whpr2).
 % ...
 
 % --------------------------------------------------------------------
@@ -264,10 +277,10 @@ rule(s(Y,WH),[np(X^Y),vp(X,WH)]).
 rule(vp(K,[WH]),[tv(Y,[WH]),np(Y^K)]).
 rule(s(X,[WH]),[vp(X,[WH])]).
 
-rule(Y,[whpr(X^Y),vp(X,[])]).
+rule(q(Y),[whpr(X^Y),vp(X,[])]).
 rule(ynq(Y),[aux, s(Y)]).
 rule(ynq(Y),[aux, np(X^Y),vp(X,[])]).
-rule(Z,[whpr((X^Y)^Z), inv_s(Y,[X])]).
+rule(q(Z),[whpr((X^Y)^Z), inv_s(Y,[X])]).
 rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])]).
 
 rule(n(X^and(Y,Z)),[n(X^Y),rc(X^Z,[])]).
@@ -321,7 +334,6 @@ respond(Evaluation) :-
 % wh-interrogative false in the model
 % ...							
 
-
 % ===========================================================
 % Helper Functions
 % ===========================================================
@@ -330,3 +342,8 @@ respond(Evaluation) :-
 % parse([does,the,sandwich,contain,no,meat], X)
 % parse([has,no,meat], X)
 % parse([every, white, container, on, the, bottom, shelf, contains, a, banana], X)
+% parse([the,white,box,in,the,freezer,contains,ham],X)
+% parse([who,drank,the,almond,milk], X)
+% parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
+% parse([is,there,a,sandwich,contain,no,meat], X)
+% 
