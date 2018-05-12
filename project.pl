@@ -124,6 +124,7 @@ lemma(like,tv).
 lemma(sneeze,tv).
 lemma(has,tv).
 lemma(drank,tv).
+lemma(punch,tv).
 
 lemma(belong,pv).
 lemma(rely,pv).
@@ -291,7 +292,11 @@ rule(n(X^and(Y,Z)),[n(X^Y),rc(Z,[X])]).
 rule(rc(X,[]),[rel,vp(X,[])]).
 %(RC; φ, [x]) -> REL (S; φ, [x])
 rule(rc(X,[Z]),[rel,s(X,[Z])]).
-%
+
+% (IV; λx.φ, [y]) -> (TV; λx.λy.φ, [ ])
+rule(iv(X^P,[Y]),[tv(X^Y^P,[])]).
+% (TV; λy.φ, [x]) -> (TV; λx.λy.φ, [ ])
+rule(tv(Y^P,[X]),[tv(X^Y^P,[])]).
 % ...
 
 
@@ -345,6 +350,9 @@ respond(Evaluation) :-
 % parse([every, white, container, on, the, bottom, shelf, contains, a, banana], X)
 % parse([the,white,box,in,the,freezer,contains,ham],X)
 % parse([who,drank,the,almond,milk], X)
+% parse([tom,punched], X).
+% parse([who,did,tom,punched], X).
+
 % parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
 % parse([is,there,a,sandwich,contain,no,meat], X)
-% 
+% parse([which,milk,did,sam,drink], X).
