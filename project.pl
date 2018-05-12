@@ -137,6 +137,7 @@ lemma(under,p).
 lemma(on,p).
 lemma(near,p).
 lemma(over,p).
+lemma(inside,p).
 
 lemma(on,vacp).   
 lemma(to,vacp).
@@ -250,7 +251,7 @@ lex(pv(X^Y^P,[]),Lemma) :-
     lemma(Lemma,pv),
 	P=..[Lemma,X,Y].
 %(P; λP.P, []) -> on | of | to | at | ...
-lex(p(X,[]), Word) :-
+lex(p(_,[]), Word) :-
     lemma(Word,vacp).
 %(PP; λP.P(X), [x]) -> on | of | to | at | ...
 lex(pp(X^_,[X]), Word) :-
@@ -284,7 +285,7 @@ rule(n(X^Z),[n(X^Y),pp((X^Y)^Z)]).
 rule(pp(Z),[p(X^Y^Z),np(X^Y)]).
 
 % New rules: need to handle there exists
-rule(np(X),[n(X)]).
+rule(np((X^B)^exists(X,and(Y,B))),[n(X^Y)]).
 
 % ToDo: Add rule for ditransistive
 
@@ -365,6 +366,7 @@ respond(Evaluation) :-
 % ===========================================================
 %check_tv(Word,Lemma):- member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,tv).
 % parse([a,blue,box,contains,some,ham], X)
+% parse([a,blue,box,contains,ham], X)
 % parse([does,the,sandwich,contain,no,meat], X)
 % parse([has,no,meat], X)
 % parse([every, white, container, on, the, bottom, shelf, contains, a, banana], X)
