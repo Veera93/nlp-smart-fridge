@@ -104,6 +104,9 @@ lemma(house,n).
 lemma(meat,n).
 lemma(fruit,n).
 lemma(sandwich,n).
+lemma(container,n).
+lemma(shelf,n).
+lemma(banana,n).
 
 lemma(tom,pn).
 lemma(mia,pn).
@@ -114,6 +117,7 @@ lemma(contain,tv).
 lemma(belong,tv).
 lemma(like,tv).
 lemma(sneeze,tv).
+lemma(has,tv).
 
 lemma(in,p).
 lemma(under,p).
@@ -143,6 +147,7 @@ lemma(red,adj).
 lemma(green,adj).
 lemma(black,adj).
 lemma(happy,adj).
+lemma(bottom,adj).
 
 % Questions
 lemma(will,aux).
@@ -323,4 +328,5 @@ respond(Evaluation) :-
 %check_tv(Word,Lemma):- member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,tv).
 
 % parse([does,the,sandwich,contain,no,meat], X)
-% parse([does,the,sandwich,contains,no,meat], X)
+% parse([has,no,meat], X)
+% parse([every, white, container, on, the, bottom, shelf, contains, a, banana], X)
