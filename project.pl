@@ -143,6 +143,7 @@ lemma(inside,p).
 
 lemma(on,vacp).   
 lemma(to,vacp).
+lemma(there,vacp).
 
 lemma(one,num).
 lemma(two,num).
@@ -268,6 +269,8 @@ lex(dtv(X^Y^Z^P,[]),Word):-
 	member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),
 	lemma(Lemma,dtv),
 	P =.. [Lemma,X,Y,Z].
+%BE
+lex(be,Word) :- lemma(Word,be).
 % ...
 
 % --------------------------------------------------------------------
@@ -308,6 +311,7 @@ rule(s(X,[WH]),[vp(X,[WH])]).
 rule(q(Y),[whpr(X^Y),vp(X,[])]).
 rule(ynq(Y),[aux, s(Y)]).
 rule(ynq(Y),[aux, np(X^Y),vp(X,[])]).
+rule(ynq(Y),[be, np(X^Y),pp(X)]).
 rule(q(Z),[whpr((X^Y)^Z), inv_s(Y,[X])]).
 rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])]).
 
@@ -404,6 +408,7 @@ respond(Evaluation) :-
 % parse([is,there,an,egg,inside,the,blue,box], X)
 % Is there a sandwich that does not contain meat?
 % Is there an empty box of popsicles in the freezer?
-% parse([are,there,two,eggs,inside,the,blue,box],X).
+% 
 
+% Same as exists: parse([are,there,two,eggs,inside,the,blue,box],X).
 
