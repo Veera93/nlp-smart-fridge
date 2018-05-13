@@ -129,6 +129,8 @@ lemma(has,tv).
 lemma(drank,tv).
 lemma(punch,tv).
 
+lemma(put,dtv).
+
 lemma(belong,pv).
 lemma(rely,pv).
 
@@ -239,10 +241,10 @@ lex(dt((X^P)^(X^Q)^not(X,and(P,Q))),Word):-
 lex(aux, Word):-
 		lemma(Word,aux).
 % (WHPR; λP.?x(person(x), P(x))) -> who
-lex(whpr((X^P)^exists(X,and(person(X)),P)), Word):-
+lex(whpr((X^P)^exists(X,and(person(X),P))), Word):-
     lemma(Word,whpr1).
 % (WHPR; λP.?x(thing(x), P(x))) -> what
-lex(whpr((X^P)^exists(X,and(thing(X)),P)), Word):-
+lex(whpr((X^P)^exists(X,and(thing(X),P))), Word):-
     lemma(Word,whpr2).
 
 %Lex for PP complement
@@ -251,13 +253,21 @@ lex(pv(X^Y^P,[]),Lemma) :-
     lemma(Lemma,pv),
 	P=..[Lemma,X,Y].
 %(P; λP.P, []) -> on | of | to | at | ...
-lex(p(_,[]), Word) :-
+lex(vacp([]), Word) :-
     lemma(Word,vacp).
 %(PP; λP.P(X), [x]) -> on | of | to | at | ...
 lex(pp(X^_,[X]), Word) :-
     lemma(Word,vacp).
+
 lex(rel, Word):-
 		lemma(Word,rel).
+lex(p(X^Y^Z),Word):-lemma(Word,p),Z =.. [Word,X,Y].
+
+%DTV
+lex(dtv(X^Y^Z^P,[]),Word):-
+	member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),
+	lemma(Lemma,dtv),
+	P =.. [Lemma,X,Y,Z].
 % ...
 
 % --------------------------------------------------------------------
@@ -284,10 +294,8 @@ rule(n(Y),[adj(X^Y),n(X)]).
 rule(n(X^Z),[n(X^Y),pp((X^Y)^Z)]).
 rule(pp(Z),[p(X^Y^Z),np(X^Y)]).
 
-% New rules: need to handle there exists
+% New rules: Handled there exists
 rule(np((X^B)^exists(X,and(Y,B))),[n(X^Y)]).
-
-% ToDo: Add rule for ditransistive
 
 % Question rules: sym sem3
 rule(vp(X^K,[]),[tv(X^Y,[]),np(Y^K)]).
@@ -318,7 +326,13 @@ rule(tv(Y^P,[X]),[tv(X^Y^P,[])]).
 
 % (VP;X^Y) -> (PV;Y)(PP;X))
 rule(vp(X^Y,[WH]),[pv(X^Z,[]),pp(Z^Y,[WH])]).
-% ...
+
+% DTV
+rule(vp(X^A,[]),[dtv(X^Y^Z^W,[]),np((Y^B)^A),np((Z^W)^B)]).
+rule((np(X)),[vacp([]),np(X)]).
+
+% Piazza post
+rule(pp(X^Y),[p(X^Z),np(Z^Y)]).
 
 
 % ===========================================================
@@ -379,6 +393,7 @@ respond(Evaluation) :-
 % parse([every, blue, container, on, the, top, shelf, contains, a, sandwich, that, has, no, meat],X).
 % parse([what, does, the, yellow, bowl, on, the, middle, shelf, contain],X).
 % parse([who, drank, the, almond, milk],X).
+% parse([who,put,every,yellow,box,on,the,white,bowl],X).
 % 
 % parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
 % parse([is,there,a,sandwich,contain,no,meat], X)
@@ -390,5 +405,5 @@ respond(Evaluation) :-
 % Is there a sandwich that does not contain meat?
 % Is there an empty box of popsicles in the freezer?
 % parse([are,there,two,eggs,inside,the,blue,box],X).
-% parse([who,put,every,yellow,box,on,the,white,bowl],X).
+
 
