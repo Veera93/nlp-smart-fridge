@@ -127,6 +127,7 @@ lemma(like,tv).
 lemma(sneeze,tv).
 lemma(has,tv).
 lemma(drank,tv).
+lemma(drink,tv).
 lemma(punch,tv).
 
 lemma(put,dtv).
@@ -221,6 +222,11 @@ lex(adj((X^P)^X^and(P,Q)),Lemma):-
 	lemma(Lemma,adj),
 	Q=..[Lemma,X].
 
+%Numerals
+lex(dt((X^P)^(X^Q)^R),Word):-
+		lemma(Word,num),
+    	R=..[Word,X,and(P,Q)].
+
 %Preposition
 lex(p((Y^R)^Q^(X^P)^and(P,Q)),Lemma):-
 	lemma(Lemma,p),
@@ -234,6 +240,8 @@ lex(dt((X^P)^(X^Q)^exists(X,and(P,Q))),Word):-
 
 lex(dt((X^P)^(X^Q)^the(X,and(P,Q))),Word):-
 		lemma(Word,dtthe).
+
+
 
 %No - determinant
 lex(dt((X^P)^(X^Q)^not(X,and(P,Q))),Word):-
@@ -398,6 +406,7 @@ respond(Evaluation) :-
 % parse([what, does, the, yellow, bowl, on, the, middle, shelf, contain],X).
 % parse([who, drank, the, almond, milk],X).
 % parse([who,put,every,yellow,box,on,the,white,bowl],X).
+% parse([are,there,two,eggs,inside,the,blue,box],X).
 % 
 % parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
 % parse([is,there,a,sandwich,contain,no,meat], X)
@@ -409,6 +418,4 @@ respond(Evaluation) :-
 % Is there a sandwich that does not contain meat?
 % Is there an empty box of popsicles in the freezer?
 % 
-
-% Same as exists: parse([are,there,two,eggs,inside,the,blue,box],X).
 
