@@ -115,6 +115,8 @@ lemma(almond,n).
 lemma(milk,n).
 lemma(shelf,n).
 lemma(apple,n).
+lemma(watermelons,n).
+lemma(fridge,n).
 
 lemma(tom,pn).
 lemma(mia,pn).
@@ -320,6 +322,8 @@ rule(q(Y),[whpr(X^Y),vp(X,[])]).
 rule(ynq(Y),[aux, s(Y)]).
 rule(ynq(Y),[aux, np(X^Y),vp(X,[])]).
 rule(ynq(Y),[be, np(X^Y),pp(X)]).
+% be np
+rule(ynq(Y),[be, np(_^Y)]).
 rule(q(Z),[whpr((X^Y)^Z), inv_s(Y,[X])]).
 rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])]).
 
@@ -407,11 +411,11 @@ respond(Evaluation) :-
 % parse([who, drank, the, almond, milk],X).
 % parse([who,put,every,yellow,box,on,the,white,bowl],X).
 % parse([are,there,two,eggs,inside,the,blue,box],X).
+% Are there two watermelons in the fridge?
+% Is there milk?
 % 
 % parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
 % parse([is,there,a,sandwich,contain,no,meat], X)
-% Are there two watermelons in the fridge?
-% Is there milk?
 % parse([which,milk,did,sam,drink], X).
 % 
 % parse([is,there,an,egg,inside,the,blue,box], X)
