@@ -360,6 +360,161 @@ rule(pp(X^Y),[p(X^Z),np(Z^Y)]).
 
 % model(...,...)
 
+% __________________________________________________
+%
+%             MODEL CHECKER (closed world assumption)
+% __________________________________________________
+
+
+
+% ==================================================
+% A simple model
+% ==================================================
+
+model([a,b],
+           [ 
+           [blue,[a]],
+           [box, [a]],
+           [ham,[b]],
+           [contain, [[a,b]]]]).
+
+modelchecker(s(Parse),X):-  sat([],Parse,G), G = [_|_],X = [true_in_the_model].
+modelchecker(s(Parse),X):-  \+sat([],Parse,_), X = [not_true_in_the_model].
+
+modelchecker(ynq(Parse),X):-  sat([],Parse,G), G = [_|_],X = [yes_to_question].
+modelchecker(ynq(Parse),X):-  \+sat([],Parse,_),X = [no_to_question].
+
+modelchecker(q(Parse),X):- sat([],Parse,G),get_attributes(G,X,[]).
+
+get_attributes([],Attributes,Attributes).
+get_attributes([[_,X]|L],Attributes,Entities):-  model(_,F),
+    findall(Label, label(X,F,Label),Bag),
+    atomic_list_concat(Bag, ' ', A),
+    atom_string(A,Str),
+    get_attributes(L,Attributes,[Str|Entities]).
+label(X,F,Label):-
+    member([Label,ListOfValues],F),member(X,ListOfValues).
+
+
+% ==================================================
+% Function i
+% Determines the value of a variable/constant in an assignment G
+% ==================================================
+
+i(Var,G,Value):- 
+    var(Var),
+    member([Var2,Value],G), 
+    Var == Var2.   
+
+i(C,_,Value):- 
+   nonvar(C),
+   f(C,Value).
+
+
+% ==================================================
+% Function F
+% Determines if a value is in the denotation of a Predicate/Relation
+% ==================================================
+
+f(Symbol,Value):- 
+   model(_,F),
+    member([Symbol,ListOfValues],F), 
+    member(Value,ListOfValues).  
+
+
+% ==================================================
+% Extension of a variable assignment
+% ==================================================
+
+extend(G,X,[ [X,Val] | G]):-
+   model(D,_),
+   member(Val,D).
+
+
+% ==================================================
+% Existential quantifier
+% ==================================================
+
+sat(G1,exists(X,Formula),G3):-
+   extend(G1,X,G2),
+   sat(G2,Formula,G3).
+
+
+% ==================================================
+% Definite quantifier (semantic rather than pragmatic account)
+% ==================================================
+
+ sat(G1,the(X,and(A,B)),G3):-
+   sat(G1,exists(X,and(A,B)),G3),
+   i(X,G3,Value), 
+   \+ ( ( sat(G1,exists(X,A),G2), i(X,G2,Value2), \+(Value = Value2)) ).
+
+
+
+
+% ==================================================
+% Negation 
+% ==================================================
+
+sat(G,not(Formula2),G):-
+   \+ sat(G,Formula2,_).
+
+% ==================================================
+% Universal quantifier
+% ==================================================
+
+sat(G, forall(X,Formula2),G):-
+  sat(G,not( exists(X,not(Formula2) ) ),G).
+
+
+% ==================================================
+% Conjunction
+% ==================================================
+
+sat(G1,and(Formula1,Formula2),G3):-
+  sat(G1,Formula1,G2), 
+  sat(G2,Formula2,G3). 
+
+
+% ==================================================
+% Disjunction
+% ==================================================
+
+
+sat(G1,or(Formula1,Formula2),G2):-
+  ( sat(G1,Formula1,G2) ;
+    sat(G1,Formula2,G2) ).
+
+
+% ==================================================
+% Implication
+% ==================================================
+
+sat(G1,imp(Formula1,Formula2),G2):-
+   sat(G1,or(not(Formula1),Formula2),G2).
+
+
+% ==================================================
+% Predicates
+% ==================================================
+
+sat(G,Predicate,G):-
+   Predicate =.. [P,Var],
+   \+ (P = not),
+   i(Var,G,Value),
+   f(P,Value).
+
+% ==================================================
+% Two-place Relations
+% ==================================================
+
+sat(G,Rel,G):-
+   Rel =.. [R,Var1,Var2],
+   \+ ( member(R,[exists,forall,and,or,imp,the]) ),
+   i(Var1,G,Value1),
+   i(Var2,G,Value2),
+   f(R,[Value1,Value2]).
+
 % ===========================================================
 %  Respond
 %  For each input type, react appropriately.
