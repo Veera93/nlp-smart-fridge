@@ -390,7 +390,7 @@ modelchecker(s(Parse),X):-  \+sat([],Parse,_), X = [not_true_in_the_model].
 modelchecker(ynq(Parse),X):-  sat([],Parse,G), G = [_|_],X = [yes_to_question].
 modelchecker(ynq(Parse),X):-  \+sat([],Parse,_),X = [no_to_question].
 
-modelchecker(q(Parse),X):- sat([],Parse,G),get_attributes(G,X,[]).
+modelchecker(q(Parse),X):- sat([],Parse,[_|G]),get_attributes(G,X,[]).
 modelchecker(q(Parse),X):- \+sat([],Parse,_), X = [no].
 
 get_attributes([],Attributes,Attributes).
