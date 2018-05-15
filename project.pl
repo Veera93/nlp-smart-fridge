@@ -371,10 +371,15 @@ rule(pp(X^Y),[p(X^Z),np(Z^Y)]).
 % A simple model
 % ==================================================
 
-model([a,b],
+model([a,b,m,s],
            [ 
            [blue,[a]],
            [box, [a]],
+           [sam,[s]],
+           [person,[s]],
+           [milk,[m]],
+           [drink,[[s,m]]],
+           [drank,[[s,m]]],
            [ham,[b]],
            [thing,[a,b]],
            [contain, [[a,b]]]]).
@@ -395,7 +400,8 @@ get_attributes([[_,X]|L],Attributes,Entities):-  model(_,F),
     atom_string(A,Str),
     get_attributes(L,Attributes,[Str|Entities]).
 label(X,F,Label):-
-    member([Label,ListOfValues],F),member(X,ListOfValues),\+ (Label = thing).
+    member([Label,ListOfValues],F),member(X,ListOfValues),\+ (Label = thing),
+    \+ (Label = person).
 
 
 % ==================================================
