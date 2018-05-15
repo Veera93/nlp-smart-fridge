@@ -195,33 +195,14 @@ lemma(to,rel).
 
 lemma(gave,dtv).
 lemma(take,dtv).
-lemma(threw,dtv)
+lemma(threw,dtv).
 lemma(order,dtv).
 
 lemma(from,p).
 
 lemma(expire,iv).
 lemma(spoil,iv).
-lemma(freeze,iv)
-lemma(damage,iv).
-lemma(fell,iv).
-
-
-lemma(rui,pn).
-lemma(veera,pn).
-lemma(Kaushik,pn).
-lemma(who,rel).
-
-lemma(gave,dtv).
-lemma(take,dtv).
-lemma(threw,dtv)
-lemma(order,dtv).
-
-lemma(from,p).
-
-lemma(expire,iv).
-lemma(spoil,iv).
-lemma(freeze,iv)
+lemma(freeze,iv).
 lemma(damage,iv).
 lemma(fell,iv).
 
@@ -229,6 +210,7 @@ lemma(fell,iv).
 lemma(rui,pn).
 lemma(veera,pn).
 lemma(kaushik,pn).
+lemma(who,rel).
 
  
 % --------------------------------------------------------------------
@@ -407,30 +389,34 @@ rule(pp(X^Y),[p(X^Z),np(Z^Y)]).
 % A simple model
 % ==================================================
 
-model([a,b,m,s,f,p,x],
-           [ 
-           [blue,[a]],
-           [box, [a,x]],
+model([a,b,m,s,f,p,x,y,z,e,bx,a1,a2,a3,a4,a5,a6,a7,a8],
+           [
            [sam,[s]],
+           [egg,[a1,a2,a3,a4,a5,a6,a7,a8]],
+           [fridge,[z]],
+           [apple,[e]],
+           [box,[bx]],
+           [in,[[a1,z],[a2,z],[a3,z],[a4,z],[a5,z],[a6,z],[a7,z],[a8,z],[e,bx]]],
            [freezer,[f]],
            [popsicle,[p]],
            [empty,[x]],
            [person,[s]],
+           [almond,[m]],
            [milk,[m]],
            [drink,[[s,m]]],
            [drank,[[s,m]]],
            [ham,[b]],
            [thing,[a,b]],
-           [contain, [[a,b],[]]]]).
+           [contain, [[a,b],[a1,z],[a2,z],[a3,z],[a4,z],[a5,z],[a6,z],[a7,z],[a8,z],[e,bx]]]]).
 
 modelchecker(s(Parse),X):-  sat([],Parse,G), G = [_|_],X = [true_in_the_model].
-modelchecker(s(Parse),X):-  \+sat([],Parse,_), X = [not_true_in_the_model].
+modelchecker(s(Parse),X):-  sat([],Parse,G), G=[], X = [not_true_in_the_model].
 
 modelchecker(ynq(Parse),X):-  sat([],Parse,G), G = [_|_],X = [yes_to_question].
-modelchecker(ynq(Parse),X):-  \+sat([],Parse,_),X = [no_to_question].
+modelchecker(ynq(Parse),X):-  sat([],Parse,G), G=[],X = [no_to_question].
 
-modelchecker(q(Parse),X):- sat([],Parse,[_|G]),get_attributes(G,X,[]).
-modelchecker(q(Parse),X):- \+sat([],Parse,_), X = [no].
+modelchecker(q(Parse),X):- sat([],Parse,G),get_attributes(G,X,[]).
+modelchecker(q(Parse),X):- sat([],Parse,G), G=[],X = [no].
 
 get_attributes([],Attributes,Attributes).
 get_attributes([[_,X]|L],Attributes,Entities):-  model(_,F),
@@ -477,7 +463,36 @@ extend(G,X,[ [X,Val] | G]):-
    model(D,_),
    member(Val,D).
 
-
+% ==================================================
+% Most quantifier
+% ==================================================
+sat(G1,one(X,Formula),G3):-
+    sat(G1,exists(X,Formula),G3),
+    length(G3,L), L>=1.
+sat(G1,two(X,Formula),G3):-
+    sat(G1,exists(X,Formula),G3),
+    length(G3,L), L>=2.
+%sat(G1,three(X,Formula),G3):-
+%    sat(G1,exists(X,Formula),G3),
+%    length(G3,L), L>=3.
+%sat(G1,four(X,Formula),G3):-
+%    sat(G1,exists(X,Formula),G3),
+%    length(G3,L), L>=4.
+%sat(G1,five(X,Formula),G3):-
+%    sat(G1,exists(X,Formula),G3),
+%    length(G3,L), L>=5.
+%sat(G1,siz(X,Formula),G3):-
+%    sat(G1,exists(X,Formula),G3),
+%    length(G3,L), L>=6.
+%sat(G1,seven(X,Formula),G3):-
+%    sat(G1,exists(X,Formula),G3),
+%    length(G3,L), L>=7.
+%sat(G1,eight(X,Formula),G3):-
+%    sat(G1,exists(X,Formula),G3),
+%    length(G3,L), L>=8.
+%sat(G1,nine(X,Formula),G3):-
+%    sat(G1,exists(X,Formula),G3),
+%    length(G3,L), L>=9.
 % ==================================================
 % Existential quantifier
 % ==================================================
