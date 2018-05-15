@@ -634,13 +634,10 @@ respond([X|Evaluation]) :-
 % parse([are,there,two,eggs,inside,the,blue,box],X).
 % Are there two watermelons in the fridge?
 % Is there milk?
-% 
-% parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
-% parse([is,there,a,sandwich,contain,no,meat], X)
-% parse([which,milk,did,sam,drink], X).
-% 
+% parse([is,there,a,sandwich,that,contain,no,meat], X)
 % parse([is,there,an,egg,inside,the,blue,box], X)
+
+% parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
+% parse([which,milk,did,sam,drink], X). 
 % Is there a sandwich that does not contain meat?
 % Is there an empty box of popsicles in the freezer?
-% 
-
