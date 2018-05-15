@@ -98,6 +98,7 @@ lemma(every,dtforall).
 lemma(the,dtthe).
 
 lemma(no,dtnot).
+lemma(not,dtnot).
 
 lemma(box,n).
 lemma(ham,n).
@@ -117,10 +118,20 @@ lemma(shelf,n).
 lemma(apple,n).
 lemma(watermelons,n).
 lemma(fridge,n).
+lemma(popsicle,n).
 
 lemma(tom,pn).
 lemma(mia,pn).
 lemma(sue,pn).
+lemma(rui,pn).
+lemma(veera,pn).
+lemma(kaushik,pn).
+
+lemma(expire,iv).
+lemma(spoil,iv).
+lemma(freeze,iv).
+lemma(damage,iv).
+lemma(fell,iv).
 
 lemma(eat,tv).
 lemma(ate,tv).
@@ -131,8 +142,13 @@ lemma(has,tv).
 lemma(drank,tv).
 lemma(drink,tv).
 lemma(punch,tv).
+lemma(belong,tv).
 
 lemma(put,dtv).
+lemma(gave,dtv).
+lemma(take,dtv).
+lemma(threw,dtv).
+lemma(order,dtv).
 
 lemma(belong,pv).
 lemma(rely,pv).
@@ -143,10 +159,13 @@ lemma(on,p).
 lemma(near,p).
 lemma(over,p).
 lemma(inside,p).
+lemma(of,p).
+lemma(from,p).
 
 lemma(on,vacp).   
 lemma(to,vacp).
 lemma(there,vacp).
+lemma(of,vacp).
 
 lemma(one,num).
 lemma(two,num).
@@ -171,6 +190,7 @@ lemma(bottom,adj).
 lemma(almond,adj).
 lemma(top,adj).
 lemma(middle,adj).
+lemma(empty,adj).
 
 % Questions
 lemma(will,aux).
@@ -192,24 +212,6 @@ lemma(or,coord).
 lemma(that,rel).
 lemma(which,rel).
 lemma(to,rel).
-
-lemma(gave,dtv).
-lemma(take,dtv).
-lemma(threw,dtv).
-lemma(order,dtv).
-
-lemma(from,p).
-
-lemma(expire,iv).
-lemma(spoil,iv).
-lemma(freeze,iv).
-lemma(damage,iv).
-lemma(fell,iv).
-
-
-lemma(rui,pn).
-lemma(veera,pn).
-lemma(kaushik,pn).
 lemma(who,rel).
 
  
@@ -632,12 +634,13 @@ respond([X|Evaluation]) :-
 % parse([who, drank, the, almond, milk],X).
 % parse([who,put,every,yellow,box,on,the,white,bowl],X).
 % parse([are,there,two,eggs,inside,the,blue,box],X).
-% Are there two watermelons in the fridge?
-% Is there milk?
+% parse([are, there, two, watermelons, in, the, fridge],X)
+% parse([is,there,milk],X)
 % parse([is,there,a,sandwich,that,contain,no,meat], X)
 % parse([is,there,an,egg,inside,the,blue,box], X)
-
+% parse([what, does, the, green, box, on, the, top, shelf, contain],X)
 % parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
+% parse([is, there, an, empty, box, of, popsicles, in, the, freezer],X)
+
 % parse([which,milk,did,sam,drink], X). 
-% Is there a sandwich that does not contain meat?
-% Is there an empty box of popsicles in the freezer?
+% parse([is, there, a, sandwich, that, does, not, contain, meat],X)
