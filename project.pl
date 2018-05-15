@@ -56,8 +56,8 @@ parse(Input, SemanticRepresentation):-
         srparse([],Input, SemanticRepresentation).
  
 srparse([X],[], X).
-srparse([X],[], X):-
-	numbervars(X,0,_).
+%srparse([X],[], X):-
+%	numbervars(X,0,_).
 
 srparse([Y,X|MoreStack],Words,SemanticRepresentation):-
        rule(LHS,[X,Y]),
@@ -376,6 +376,7 @@ model([a,b],
            [blue,[a]],
            [box, [a]],
            [ham,[b]],
+           [thing,[a,b]],
            [contain, [[a,b]]]]).
 
 modelchecker(s(Parse),X):-  sat([],Parse,G), G = [_|_],X = [true_in_the_model].
@@ -385,6 +386,7 @@ modelchecker(ynq(Parse),X):-  sat([],Parse,G), G = [_|_],X = [yes_to_question].
 modelchecker(ynq(Parse),X):-  \+sat([],Parse,_),X = [no_to_question].
 
 modelchecker(q(Parse),X):- sat([],Parse,G),get_attributes(G,X,[]).
+modelchecker(q(Parse),X):- \+sat([],Parse,_), X = [no].
 
 get_attributes([],Attributes,Attributes).
 get_attributes([[_,X]|L],Attributes,Entities):-  model(_,F),
@@ -393,7 +395,7 @@ get_attributes([[_,X]|L],Attributes,Entities):-  model(_,F),
     atom_string(A,Str),
     get_attributes(L,Attributes,[Str|Entities]).
 label(X,F,Label):-
-    member([Label,ListOfValues],F),member(X,ListOfValues).
+    member([Label,ListOfValues],F),member(X,ListOfValues),\+ (Label = thing).
 
 
 % ==================================================
