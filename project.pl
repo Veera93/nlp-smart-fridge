@@ -192,7 +192,43 @@ lemma(or,coord).
 lemma(that,rel).
 lemma(which,rel).
 lemma(to,rel).
+
+lemma(gave,dtv).
+lemma(take,dtv).
+lemma(threw,dtv)
+lemma(order,dtv).
+
+lemma(from,p).
+
+lemma(expire,iv).
+lemma(spoil,iv).
+lemma(freeze,iv)
+lemma(damage,iv).
+lemma(fell,iv).
+
+
+lemma(rui,pn).
+lemma(veera,pn).
+lemma(Kaushik,pn).
 lemma(who,rel).
+
+lemma(gave,dtv).
+lemma(take,dtv).
+lemma(threw,dtv)
+lemma(order,dtv).
+
+lemma(from,p).
+
+lemma(expire,iv).
+lemma(spoil,iv).
+lemma(freeze,iv)
+lemma(damage,iv).
+lemma(fell,iv).
+
+
+lemma(rui,pn).
+lemma(veera,pn).
+lemma(kaushik,pn).
 
  
 % --------------------------------------------------------------------
@@ -371,18 +407,21 @@ rule(pp(X^Y),[p(X^Z),np(Z^Y)]).
 % A simple model
 % ==================================================
 
-model([a,b,m,s],
+model([a,b,m,s,f,p,x],
            [ 
            [blue,[a]],
-           [box, [a]],
+           [box, [a,x]],
            [sam,[s]],
+           [freezer,[f]],
+           [popsicle,[p]],
+           [empty,[x]],
            [person,[s]],
            [milk,[m]],
            [drink,[[s,m]]],
            [drank,[[s,m]]],
            [ham,[b]],
            [thing,[a,b]],
-           [contain, [[a,b]]]]).
+           [contain, [[a,b],[]]]]).
 
 modelchecker(s(Parse),X):-  sat([],Parse,G), G = [_|_],X = [true_in_the_model].
 modelchecker(s(Parse),X):-  \+sat([],Parse,_), X = [not_true_in_the_model].
@@ -549,10 +588,14 @@ respond(Evaluation) :-
 		write('no').
 
 % wh-interrogative true in the model
-% ...							
+respond(Evaluation) :- 
+		Evaluation = [no],
+		write('no').							
 
 % wh-interrogative false in the model
-% ...							
+respond([]).
+respond([X|Evaluation]) :- 
+		write(X),respond(Evaluation).							
 
 % ===========================================================
 % Helper Functions
