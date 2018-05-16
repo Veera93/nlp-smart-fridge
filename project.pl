@@ -391,25 +391,33 @@ rule(pp(X^Y),[p(X^Z),np(Z^Y)]).
 % A simple model
 % ==================================================
 
-model([a,b,m,s,f,p,x,y,z,e,bx,a1,a2,a3,a4,a5,a6,a7,a8],
+model([hm,mlk,su,frzr,ppsle,frdg,aple,bx,
+        eg1,eg2,eg3,eg4,eg5,eg6,eg7,eg8,
+        cntr,mshlf,bwl],
            [
-           [sam,[s]],
-           [egg,[a1,a2,a3,a4,a5,a6,a7,a8]],
-           [fridge,[z]],
-           [apple,[e]],
+           [white,[cntr]],
+           [container,[cntr]],
+           [sue,[su]],
+           [shelf,[mshlf]],
+           [middle,[mshlf]],
+           [yellow,[bwl]],
+           [bowl,[bwl]],
+           [on,[[bwl,mshlf]]],
+           [egg,[eg1,eg2,eg3,eg4,eg5,eg6,eg7,eg8]],
+           [fridge,[frdg]],
+           [apple,[aple]],
            [box,[bx]],
-           [in,[[a1,z],[a2,z],[a3,z],[a4,z],[a5,z],[a6,z],[a7,z],[a8,z],[e,bx]]],
-           [freezer,[f]],
-           [popsicle,[p]],
-           [empty,[x]],
-           [person,[s]],
-           [almond,[m]],
-           [milk,[m]],
-           [drink,[[s,m]]],
-           [drank,[[s,m]]],
-           [ham,[b]],
-           [thing,[a,b]],
-           [contain, [[a,b],[a1,z],[a2,z],[a3,z],[a4,z],[a5,z],[a6,z],[a7,z],[a8,z],[e,bx]]]]).
+           [in,[[eg1,frdg],[eg2,frdg],[eg3,frdg],[eg4,frdg],[eg5,frdg],[eg6,frdg],[eg7,frdg],[eg8,frdg],[aple,bx]]],
+           [freezer,[frzr]],
+           [popsicle,[ppsle]],
+           [person,[su]],
+           [almond,[mlk]],
+           [milk,[mlk]],
+           [drink,[[su,mlk]]],
+           [drank,[[su,mlk]]],
+           [ham,[hm]],
+           [thing,[hm,bx,eg1,eg2]],
+           [contain, [[hm,bx],[bwl,eg1],[bwl,eg2],[eg1,frdg],[eg2,frdg],[eg3,frdg],[eg4,frdg],[eg5,frdg],[eg6,frdg],[eg7,frdg],[eg8,frdg],[aple,bx]]]]).
 
 modelchecker(s(Parse),X):-  sat([],Parse,G), G = [_|_],X = [true_in_the_model].
 modelchecker(s(Parse),X):-  sat([],Parse,G), G=[], X = [not_true_in_the_model].
@@ -417,7 +425,7 @@ modelchecker(s(Parse),X):-  sat([],Parse,G), G=[], X = [not_true_in_the_model].
 modelchecker(ynq(Parse),X):-  sat([],Parse,G), G = [_|_],X = [yes_to_question].
 modelchecker(ynq(Parse),X):-  sat([],Parse,G), G=[],X = [no_to_question].
 
-modelchecker(q(Parse),X):- sat([],Parse,G),get_attributes(G,X,[]).
+modelchecker(q(Parse),X):- sat([],Parse,[_|G]),get_attributes(G,X,[]).
 modelchecker(q(Parse),X):- sat([],Parse,G), G=[],X = [no].
 
 get_attributes([],Attributes,Attributes).
@@ -612,7 +620,7 @@ respond(Evaluation) :-
 % wh-interrogative false in the model
 respond([]).
 respond([X|Evaluation]) :- 
-		write(X),respond(Evaluation).							
+		write(X),write(','),respond(Evaluation).							
 
 % ===========================================================
 % Helper Functions
