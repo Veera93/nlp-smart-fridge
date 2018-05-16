@@ -435,10 +435,10 @@ model([hm,mlk,su,frzr,ppsle,frdg,aple,bx,
            [contain, [[bx,hm],[bwl,eg1],[bwl,eg2],[frdg,eg1],[frdg,eg2],[frdg,eg3],[frdg,eg4],[frdg,eg5],[frdg,eg6],[frdg,eg7],[frdg,eg8],[bx,aple]]]]).
 
 modelchecker(s(Parse),X):-  sat([],Parse,G), G = [_|_],X = [true_in_the_model].
-modelchecker(s(Parse),X):-  \+sat([],Parse,G), X = [not_true_in_the_model].
+modelchecker(s(Parse),X):-  \+sat([],Parse,_), X = [not_true_in_the_model].
 
 modelchecker(ynq(Parse),X):-  sat([],Parse,G), G = [_|_],X = [yes_to_question].
-modelchecker(ynq(Parse),X):-  \+sat([],Parse,G),X = [no_to_question].
+modelchecker(ynq(Parse),X):-  \+sat([],Parse,_),X = [no_to_question].
 
 modelchecker(q(Parse),X):- sat([],Parse,[_|G]),get_attributes(G,X,[]).
 modelchecker(q(Parse),X):- sat([],Parse,G), G==[],X = [no].
