@@ -421,7 +421,7 @@ model([hm,mlk,su,frzr,ppsle,frdg,aple,bx,
            [drank,[[su,mlk]]],
            [ham,[hm]],
            [thing,[hm,bx,eg1,eg2]],
-           [contain, [[hm,bx],[bwl,eg1],[bwl,eg2],[eg1,frdg],[eg2,frdg],[eg3,frdg],[eg4,frdg],[eg5,frdg],[eg6,frdg],[eg7,frdg],[eg8,frdg],[aple,bx]]]]).
+           [contain, [[bx,hm],[bwl,eg1],[bwl,eg2],[frdg,eg1],[frdg,eg2],[frdg,eg3],[frdg,eg4],[frdg,eg5],[frdg,eg6],[frdg,eg7],[frdg,eg8],[bx,aple]]]]).
 
 modelchecker(s(Parse),X):-  sat([],Parse,G), G = [_|_],X = [true_in_the_model].
 modelchecker(s(Parse),X):-  sat([],Parse,G), G=[], X = [not_true_in_the_model].
