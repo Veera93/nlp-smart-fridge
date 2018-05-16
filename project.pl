@@ -435,13 +435,14 @@ model([hm,mlk,su,frzr,ppsle,frdg,aple,bx,
            [contain, [[bx,hm],[bwl,eg1],[bwl,eg2],[frdg,eg1],[frdg,eg2],[frdg,eg3],[frdg,eg4],[frdg,eg5],[frdg,eg6],[frdg,eg7],[frdg,eg8],[bx,aple]]]]).
 
 modelchecker(s(Parse),X):-  sat([],Parse,G), G = [_|_],X = [true_in_the_model].
-modelchecker(s(Parse),X):-  sat([],Parse,G), G=[], X = [not_true_in_the_model].
+modelchecker(s(Parse),X):-  \+sat([],Parse,G), X = [not_true_in_the_model].
 
 modelchecker(ynq(Parse),X):-  sat([],Parse,G), G = [_|_],X = [yes_to_question].
-modelchecker(ynq(Parse),X):-  sat([],Parse,G), G=[],X = [no_to_question].
+modelchecker(ynq(Parse),X):-  \+sat([],Parse,G),X = [no_to_question].
 
 modelchecker(q(Parse),X):- sat([],Parse,[_|G]),get_attributes(G,X,[]).
-modelchecker(q(Parse),X):- sat([],Parse,G), G=[],X = [no].
+modelchecker(q(Parse),X):- sat([],Parse,G), G==[],X = [no].
+
 
 get_attributes([],Attributes,Attributes).
 get_attributes([[_,X]|L],Attributes,Entities):-  model(_,F),
@@ -521,6 +522,15 @@ sat(G1,two(X,Formula),G3):-
 % ==================================================
 % Existential quantifier
 % ==================================================
+
+% Tried to get the value for X from G but could not complete
+% find_x(_,[],G,G).
+% find_x(X,[[A,V]|G],G1,G2):-
+%     A==X,
+%     find_x(X,G,G1,[[A,V]|G2]).
+% find_x(X,[[A,_]|G],G1,G2):-
+%     \+ A==X,
+%     find_x(X,G,G1,G2).
 
 sat(G1,exists(X,Formula),G3):-
    extend(G1,X,G2),
