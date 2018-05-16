@@ -87,6 +87,8 @@ srparse(Stack,[Word|Words],SemanticRepresentation):-
 % Lemmas are uninflected, except for irregular inflection
 % lemma(+Lemma,+Category)
 % --------------------------------------------------------------------
+
+% Determinant
 lemma(a,dtexists).
 lemma(an,dtexists).
 lemma(some,dtexists).
@@ -100,6 +102,7 @@ lemma(the,dtthe).
 lemma(no,dtnot).
 lemma(not,dtnot).
 
+% Nouns
 lemma(box,n).
 lemma(ham,n).
 lemma(freezer,n).
@@ -120,6 +123,7 @@ lemma(watermelons,n).
 lemma(fridge,n).
 lemma(popsicle,n).
 
+% Proper Nouns
 lemma(tom,pn).
 lemma(mia,pn).
 lemma(sue,pn).
@@ -127,12 +131,14 @@ lemma(rui,pn).
 lemma(veera,pn).
 lemma(kaushik,pn).
 
+% Intransitive verbs
 lemma(expire,iv).
 lemma(spoil,iv).
 lemma(freeze,iv).
 lemma(damage,iv).
 lemma(fell,iv).
 
+% Transitive verbs
 lemma(eat,tv).
 lemma(ate,tv).
 lemma(contain,tv).
@@ -144,12 +150,14 @@ lemma(drink,tv).
 lemma(punch,tv).
 lemma(belong,tv).
 
+% Ditransitive verbs
 lemma(put,dtv).
 lemma(gave,dtv).
 lemma(take,dtv).
 lemma(threw,dtv).
 lemma(order,dtv).
 
+% Prepositions
 lemma(belong,pv).
 lemma(rely,pv).
 
@@ -167,6 +175,7 @@ lemma(to,vacp).
 lemma(there,vacp).
 lemma(of,vacp).
 
+% Numerals
 lemma(one,num).
 lemma(two,num).
 lemma(three,num).
@@ -179,6 +188,7 @@ lemma(nine,num).
 lemma(nine,num).
 lemma(ten,num).
 
+% Adjectives
 lemma(blue,adj).
 lemma(white,adj).
 lemma(yellow,adj).
@@ -254,23 +264,21 @@ lex(p((Y^R)^Q^(X^P)^and(P,Q)),Lemma):-
 	lemma(Lemma,p),
 	R=..[Lemma,X,Y].
 
+% Determinant
 lex(dt((X^P)^(X^Q)^forall(X,imp(P,Q))),Word):-
 		lemma(Word,dtforall).
-
 lex(dt((X^P)^(X^Q)^exists(X,and(P,Q))),Word):-
 		lemma(Word,dtexists).
-
 lex(dt((X^P)^(X^Q)^the(X,and(P,Q))),Word):-
 		lemma(Word,dtthe).
-
-
-
-%No - determinant
 lex(dt((X^P)^(X^Q)^not(X,and(P,Q))),Word):-
 		lemma(Word,dtnot).
 
+% Auxillary
 lex(aux, Word):-
 		lemma(Word,aux).
+
+% WH Questions
 % (WHPR; λP.?x(person(x), P(x))) -> who
 lex(whpr((X^P)^exists(X,and(person(X),P))), Word):-
     lemma(Word,whpr1).
@@ -281,7 +289,7 @@ lex(whpr((X^P)^exists(X,and(thing(X),P))), Word):-
 lex(whpr((X^P)^(X^Q)^exists(X,and(P,Q))), Word):-   
     lemma(Word,whpr3).
 
-%Lex for PP complement
+% PP complement
 %(PV; λx.λy.rely(x,y), []) -> rely
 lex(pv(X^Y^P,[]),Lemma) :- 
     lemma(Lemma,pv),
@@ -295,6 +303,7 @@ lex(pp(X^_,[X]), Word) :-
 
 lex(rel, Word):-
 		lemma(Word,rel).
+
 lex(p(X^Y^Z),Word):-lemma(Word,p),Z =.. [Word,X,Y].
 
 %DTV
@@ -302,8 +311,10 @@ lex(dtv(X^Y^Z^P,[]),Word):-
 	member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),
 	lemma(Lemma,dtv),
 	P =.. [Lemma,X,Y,Z].
+
 %BE
 lex(be,Word) :- lemma(Word,be).
+
 % ...
 
 % --------------------------------------------------------------------
@@ -345,7 +356,7 @@ rule(q(Y),[whpr(X^Y),vp(X,[])]).
 rule(ynq(Y),[aux, s(Y)]).
 rule(ynq(Y),[aux, np(X^Y),vp(X,[])]).
 rule(ynq(Y),[be, np(X^Y),pp(X)]).
-% be np
+
 rule(ynq(Y),[be, np(_^Y)]).
 rule(q(Z),[whpr((X^Y)^Z), inv_s(Y,[X])]).
 rule(q(Z),[whpr((X^Y)^W^Z), n(W), inv_s(Y,[X])]).
@@ -627,9 +638,9 @@ respond([X|Evaluation]) :-
 		write(X),write(','),respond(Evaluation).							
 
 % ===========================================================
-% Helper Functions
+% Successful parses
 % ===========================================================
-%check_tv(Word,Lemma):- member(Suffix,['',s,es,ed,ing]),atom_concat(Lemma,Suffix,Word),lemma(Lemma,tv).
+
 % parse([a,blue,box,contains,some,ham], X)
 % parse([a,blue,box,contains,ham], X)
 % parse([does,the,sandwich,contain,no,meat], X)
@@ -653,6 +664,4 @@ respond([X|Evaluation]) :-
 % parse([what, does, the, green, box, on, the, top, shelf, contain],X)
 % parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
 % parse([is, there, an, empty, box, of, popsicles, in, the, freezer],X)
-
 % parse([which,milk,did,sue,drink], X). 
-% parse([is, there, a, sandwich, that, does, not, contain, meat],X)
