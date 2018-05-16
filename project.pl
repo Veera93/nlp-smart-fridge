@@ -654,5 +654,5 @@ respond([X|Evaluation]) :-
 % parse([the,white,box,that,the,freezer,contains,belongs,to,sue],X)
 % parse([is, there, an, empty, box, of, popsicles, in, the, freezer],X)
 
-% parse([which,milk,did,sam,drink], X). 
+% parse([which,milk,did,sue,drink], X). 
 % parse([is, there, a, sandwich, that, does, not, contain, meat],X)
