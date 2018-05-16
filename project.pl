@@ -203,7 +203,7 @@ lemma(are,be).
 
 lemma(who,whpr1).
 lemma(what,whpr2).
-lemma(which,whpr2).
+lemma(which,whpr3).
 
 lemma(and,coord).
 lemma(but,coord).
@@ -277,6 +277,9 @@ lex(whpr((X^P)^exists(X,and(person(X),P))), Word):-
 % (WHPR; λP.?x(thing(x), P(x))) -> what
 lex(whpr((X^P)^exists(X,and(thing(X),P))), Word):-
     lemma(Word,whpr2).
+% Whpr which could be a thing or person   
+lex(whpr((X^P)^(X^Q)^exists(X,and(P,Q))), Word):-   
+    lemma(Word,whpr3).
 
 %Lex for PP complement
 %(PV; λx.λy.rely(x,y), []) -> rely
@@ -345,6 +348,7 @@ rule(ynq(Y),[be, np(X^Y),pp(X)]).
 % be np
 rule(ynq(Y),[be, np(_^Y)]).
 rule(q(Z),[whpr((X^Y)^Z), inv_s(Y,[X])]).
+rule(q(Z),[whpr((X^Y)^W^Z), n(W), inv_s(Y,[X])]).
 rule(inv_s(Y,[WH]),[aux, np(X^Y),vp(X,[WH])]).
 
 rule(n(X^and(Y,Z)),[n(X^Y),rc(X^Z,[])]).
