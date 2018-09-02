@@ -8,7 +8,7 @@ This project aims at developing a natural language understanding system that can
 
 The below diagram describes the various modules involved in the project and gives a brief description of what each module does.
 
-
+![Flow chart](/images/flow.png)
 
 ## PARSER:
 
@@ -18,10 +18,13 @@ To convert the input sentence to FOL we had to form our grammar which consists o
 
 We have handled avoiding listing all inflections for all words by identifying the stem of each token and tagging the word appropriately. In the current version at times we might not get the expected parsed output at the first lookup but the parser will eventually return the expected FOL representation.
 
+![Table](/images/table.png)
+
 ## MODEL CHECKER:
 
 The model created for this project is described below,
 
+![Model](/images/model.png)
 
 The SAT module takes the model and the pasered input and returns the satisfiability. We have modified the sat to deal with numerals, currently model works for two and we can extend it to satisfy any numerals.
 
@@ -42,3 +45,4 @@ Depending of the type of the input sentence and the output of model checker we r
 
 ## Example Run
 
+![Output](/images/output.png)
